@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "TTFL": {
+      "commandName": "Project",
+      "commandLineArgs": "SR"
+    }
+  }
+}

@@ -1,0 +1,263 @@
+﻿@page
+@model TTFL.WEB.APP.Pages.Standing.LastPickModel
+@{
+    ViewData["Title"] = "Last Pick";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card text-center table-header-card">
+                <div class="card-body">
+                    <form method="get">
+                        <div class="row">
+                            <div class="input-group">
+                                <div class="col-6 offset-2">
+                                    <select class="form-select" aria-label="Select a date" name="pickId">
+                                        @{
+                                            foreach (var item in @Model.Dates)
+                                            {
+                                                if (Model.SelectedPick != 0 && Model.SelectedPick == item.Key)
+                                                {
+                                                    <option value="@item.Key" selected>@item.Value</option>
+                                                }
+                                                else if (Model.SelectedPick == 0 && Model.Dates.IndexOf(@item) == 0)
+                                                {
+                                                    <option value="@item.Key" selected>@item.Value</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="@item.Key">@item.Value</option>
+                                                }
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                                <div class="input-group-append">
+                                    <button asp-page-handler="Submit" type="submit" class="btn btn-primary fw-bold">Go</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Guys table-->
+    <div class="row">
+        <div class="border border-dark col lg-3 text-center rounded lpHeader"><b>Team Rank : @Model.Result.BananaGuys.TeamRank (@Model.Result.BananaGuys.TeamEvolution) </b></div>
+        <div class="border border-dark col lg-3 text-center rounded lpHeader"><b>Total points : @Model.Result.BananaGuys.TeamTotalPoints</b></div>
+        <div class="border border-dark col lg-3 text-center rounded lpHeader"><b>Pick @Model.Result.PickId : @Model.Result.BananaGuys.TeamPickPoints pts</b></div>
+        <div class="border border-dark col lg-3 text-center rounded lpHeader"><b>Avg Pick : @Model.Result.BananaGuys.TeamAvgPoints pts</b></div>
+    </div>
+    <div class="row">
+        <table class="table table-responsive table-striped table-hover table-bordered lpTable">
+            <thead class="banana-background-color text-dark">
+                <tr>
+                    <th class="text-center" scope="col">Guys</th>
+                    <th class="text-center" scope="col">Rank/Evo</th>
+                    <th class="text-center" scope="col">Guy</th>
+                    <th class="text-center" scope="col">Points</th>
+                    <th class="text-center" scope="col">Last Pick</th>
+                    <th class="text-center" scope="col">Avg Pick</th>
+                    <th class="text-center" scope="col">Gap +1</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int i = 0;
+                    foreach (var guy in @Model.Result.BananaGuys.TeamResultDetails)
+                    {
+                        int gap = i == 0 ? 0 : (Model.Result.BananaGuys.TeamResultDetails[i - 1].TotalPoints - @guy.TotalPoints);
+                        int rank = i + 1;
+                        <tr>
+                            @if (@rank == 1)
+                            {
+                                <th class="text-center goldRank text-dark col-1" scope="row">🥇</th>
+                            }
+                            else if (@rank == 2)
+                            {
+                                <th class="text-center silverRank text-dark col-1" scope="row">🥈</th>
+                            }
+                            else if (@rank == 3)
+                            {
+                                <th class="text-center bronzeRank text-dark col-1" scope="row">🥉</th>
+                            }
+                            else
+                            {
+                                <th class="text-center col-1" scope="row">@rank</th>
+                            }
+
+                            @if (@guy.Evolution < 0)
+                            {
+                                <td class="text-center color-red fw-bold col-2">@guy.Rank (@guy.Evolution)</td>
+                            }
+                            else if (@guy.Evolution >= 0)
+                            {
+                                <td class="text-center color-green fw-bold col-2">@guy.Rank (@guy.Evolution)</td>
+                            }
+                            <td class="text-left col-2">@guy.Banana</td>
+                            <td class="text-center col-1">@guy.TotalPoints</td>
+                            @if (@guy.PickPoints < 20)
+                            {
+                                <td class="col-4">
+                                    <ul class="list-inline pickUl">
+                                        <li class="list-inline-item">
+                                            <img src="@guy.LastPickTeamLogo" class="img-fluid lastPickTeamLogo" />
+                                        </li>
+                                        <li class="list-inline-item">@guy.LastPick 🥕</li>
+                                    </ul>
+                                </td>
+                            }
+                            else if (@guy.IsBestPick)
+                            {
+                                <td class="col-4">
+                                    <ul class="list-inline pickUl">
+                                        <li class="list-inline-item">
+                                            <img src="@guy.LastPickTeamLogo" class="img-fluid lastPickTeamLogo" />
+                                        </li>
+                                        <li class="list-inline-item"><b>@guy.LastPick 🎖️</b></li>
+                                    </ul>
+                                </td>
+                            }
+                            else
+                            {
+                                <td class="col-4">
+                                    <ul class="list-inline pickUl">
+                                        <li class="list-inline-item">
+                                            <img src="@guy.LastPickTeamLogo" class="img-fluid lastPickTeamLogo" />
+                                        </li>
+                                        <li class="list-inline-item">@guy.LastPick</li>
+                                    </ul>
+                                </td>
+                            }
+                            <td class="text-center col-1">@guy.AvgPick</td>
+                            @if (@gap >= 0 && @gap <= 20)
+                            {
+                                <td class="text-center color-green fw-bold col-1">@gap</td>
+                            }
+                            else if (@gap > 20 && @gap <= 40)
+                            {
+                                <td class="text-center color-orange fw-bold col-1">@gap</td>
+                            }
+                            else if (@gap > 40)
+                            {
+                                <td class="text-center color-red fw-bold col-1">@gap</td>
+                            }
+                        </tr>
+                        i++;
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <!--Kids table-->
+    <div class="row">
+        <div class="border border-dark col lg-3 text-center font-weight-bold rounded lpHeader"><b>Team Rank : @Model.Result.BananaKids.TeamRank (@Model.Result.BananaKids.TeamEvolution)</b></div>
+        <div class="border border-dark col lg-3 text-center font-weight-bold rounded lpHeader"><b>Total points : @Model.Result.BananaKids.TeamTotalPoints</b></div>
+        <div class="border border-dark col lg-3 text-center font-weight-bold rounded lpHeader"><b>Pick @Model.Result.PickId : @Model.Result.BananaKids.TeamPickPoints pts</b></div>
+        <div class="border border-dark col lg-3 text-center font-weight-bold rounded lpHeader"><b>Avg Pick : @Model.Result.BananaKids.TeamAvgPoints pts</b></div>
+    </div>
+    <div class="row">
+        <table class="table table-striped table-hover table-bordered lpTable">
+            <thead class="banana-background-color text-dark">
+                <tr>
+                    <th class="text-center" scope="col">Kids</th>
+                    <th class="text-center" scope="col">Rank/Evo</th>
+                    <th class="text-center" scope="col">Kid</th>
+                    <th class="text-center" scope="col">Points</th>
+                    <th class="text-center" scope="col">Last Pick</th>
+                    <th class="text-center" scope="col">Avg Pick</th>
+                    <th class="text-center" scope="col">Gap +1</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int ii = 0;
+                    foreach (var kid in @Model.Result.BananaKids.TeamResultDetails)
+                    {
+                        int gap = ii == 0 ? 0 : (Model.Result.BananaKids.TeamResultDetails[ii - 1].TotalPoints - @kid.TotalPoints);
+                        int rank = ii + 1;
+                        <tr>
+                            @if (@rank == 1)
+                            {
+                                <th class="text-center goldRank text-dark col-1" scope="row">🥇</th>
+                            }
+                            else if (@rank == 2)
+                            {
+                                <th class="text-center silverRank text-dark col-1" scope="row">🥈</th>
+                            }
+                            else if (@rank == 3)
+                            {
+                                <th class="text-center bronzeRank text-dark col-1" scope="row">🥉</th>
+                            }
+                            else
+                            {
+                                <th class="text-center col-1" scope="row">@rank</th>
+                            }
+
+                            @if (@kid.Evolution < 0)
+                            {
+                                <td class="text-center color-red fw-bold col-2">@kid.Rank (@kid.Evolution)</td>
+                            }
+                            else if (@kid.Evolution >= 0)
+                            {
+                                <td class="text-center color-green fw-bold col-2">@kid.Rank  (@kid.Evolution)</td>
+                            }
+                            <td class="text-left col-2">@kid.Banana</td>
+                            <td class="text-center col-1">@kid.TotalPoints</td>
+                            @if (@kid.PickPoints < 20)
+                            {
+                                <td class="col-4">
+                                    <ul class="list-inline pickUl">
+                                        <li class="list-inline-item">
+                                            <img src="@kid.LastPickTeamLogo" class="img-fluid lastPickTeamLogo" />
+                                        </li>
+                                        <li class="list-inline-item">@kid.LastPick 🥕</li>
+                                    </ul>
+                                </td>
+                            }
+                            else if (@kid.IsBestPick)
+                            {
+                                <td class="col-4">
+                                    <ul class="list-inline pickUl">
+                                        <li class="list-inline-item">
+                                            <img src="@kid.LastPickTeamLogo" class="img-fluid lastPickTeamLogo" />
+                                        </li>
+                                        <li class="list-inline-item"><b>@kid.LastPick 🎖️</b></li>
+                                    </ul>
+                                </td>
+                            }
+                            else
+                            {
+                                <td class="col-4">
+                                    <ul class="list-inline pickUl">
+                                        <li class="list-inline-item">
+                                            <img src="@kid.LastPickTeamLogo" class="img-fluid lastPickTeamLogo" />
+                                        </li>
+                                        <li class="list-inline-item">@kid.LastPick</li>
+                                    </ul>
+                                </td>
+                            }
+                            <td class="text-center col-1">@kid.AvgPick</td>
+                            @if (@gap >= 0 && @gap <= 20)
+                            {
+                                <td class="text-center color-green fw-bold col-1">@gap</td>
+                            }
+                            else if (@gap > 20 && @gap <= 40)
+                            {
+                                <td class="text-center color-orange fw-bold col-1">@gap</td>
+                            }
+                            else if (@gap > 40)
+                            {
+                                <td class="text-center color-red fw-bold col-1">@gap</td>
+                            }
+                        </tr>
+                        ii++;
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "TTFL.CONSOLE": {
+      "commandName": "Project",
+      "commandLineArgs": "SR"
+    }
+  }
+}

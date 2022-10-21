@@ -1,0 +1,128 @@
+﻿@page
+@using TTFL.COMMON.Const
+@model TTFL.WEB.APP.Pages.Standing.MonthModel
+@{
+    ViewData["Title"] = "Month Standing";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card text-center table-header-card">
+                <div class="card-body">
+                    <form method="get">
+                        <div class="row">
+                            <div class="input-group">
+                                <div class="col-6 offset-2">
+                                    <select class="form-select" aria-label="Select a date" name="monthId">
+                                        @{
+                                            foreach (var item in @Model.Dates)
+                                            {
+                                                if (Model.SelectedPick != null && Model.SelectedPick == item.Key)
+                                                {
+                                                    <option value="@item.Key" selected>@item.Value</option>
+                                                }
+                                                else if (Model.SelectedPick == null && item.Key == DateTime.Now.Month)
+                                                {
+                                                    <option value="@item.Key" selected>@item.Value</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="@item.Key">@item.Value</option>
+                                                }
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                                <div class="input-group-append">
+                                    <button asp-page-handler="Submit" type="submit" class="btn btn-primary fw-bold">Go</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    @if (Model.Result == null)
+    {
+        @await Html.PartialAsync("_BananaError", AppConsts.NoDataMessage)
+    }
+    else
+    {
+        <div class="row row-cols-2 row-cols-md-2 row-cols-sm-2 text-center fw-bold mb-4">
+            <div class="col">
+                <div class="card">
+                    <div class="card-header">Selected month</div>
+                    <div class="card-body">
+                        <h5 class="card-text table-header-card">@Model.Result.PickStartDate - @Model.Result.PickEndDate</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card">
+                    <div class="card-header">Avg month picks</div>
+                    <div class="card-body">
+                        <h5 class="card-text table-header-card">@Model.Result.AvgPick pts</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <table class="table table-striped table-hover table-bordered">
+                <thead class="banana-background-color text-dark">
+                    <tr>
+                        <th class="text-center" scope="col">Rank</th>
+                        <th class="text-center" scope="col">Banana</th>
+                        <th class="text-center" scope="col">Points / Avg</th>
+                        <th class="text-center" scope="col">Gap +1</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int i = 0;
+                        foreach (var banana in Model.Result.Results)
+                        {
+                            int gap = i == 0 ? 0 : (Model.Result.Results[i - 1].TotalPoints - @banana.TotalPoints);
+                            int rank = i + 1;
+                            <tr>
+                                @if (@rank == 1)
+                                {
+                                    <th class="text-center goldRank text-dark" scope="row">🥇</th>
+                                }
+                                else if (@rank == 2)
+                                {
+                                    <th class="text-center silverRank text-dark" scope="row">🥈</th>
+                                }
+                                else if (@rank == 3)
+                                {
+                                    <th class="text-center bronzeRank text-dark" scope="row">🥉</th>
+                                }
+                                else
+                                {
+                                    <th class="text-center" scope="row">@rank</th>
+                                }
+                                <td class="text-left">@banana.Username / @banana.Team</td>
+                                <td class="text-center">@banana.TotalPoints (@banana.AvgPoints)</td>
+                                @if (@gap >= 0 && @gap <= 20)
+                                {
+                                    <td class="text-center color-green fw-bold">@gap</td>
+                                }
+                                else if (@gap > 20 && @gap <= 40)
+                                {
+                                    <td class="text-center color-orange fw-bold">@gap</td>
+                                }
+                                else if (@gap > 40)
+                                {
+                                    <td class="text-center color-red fw-bold">@gap</td>
+                                }
+                            </tr>
+                            i++;
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

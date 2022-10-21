@@ -1,0 +1,195 @@
+﻿@page
+@using TTFL.COMMON.Const
+@model IndexModel
+@{
+    ViewData["Title"] = "Home";
+}
+
+<ul class="nav nav-pills nav-tabs" id="myTab" role="tablist">
+    <li class="nav-item" role="presentation">
+        <button class="nav-link active homeNavLink" id="stats-tab" data-bs-toggle="tab" data-bs-target="#stats" type="button" role="tab" aria-controls="stats" aria-selected="true">Statistics</button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link homeNavLink" id="ttflImpact-tab" data-bs-toggle="tab" data-bs-target="#ttflImpact" type="button" role="tab" aria-controls="ttflImpact" aria-selected="false">TTFL Impact</button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link homeNavLink" id="ttflFeed-tab" data-bs-toggle="tab" data-bs-target="#ttflFeed" type="button" role="tab" aria-controls="ttflFeed" aria-selected="false">TTFL feed</button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link homeNavLink" id="trashtalk-tab" data-bs-toggle="tab" data-bs-target="#trashtalk" type="button" role="tab" aria-controls="trashtalk" aria-selected="false">Trashtalk</button>
+    </li>
+</ul>
+<div class="tab-content" id="myTabContent">
+    @if (Model.Result == null)
+    {
+        @await Html.PartialAsync("_BananaError", AppConsts.NoDataMessage)
+    }
+    else
+    {
+        <div class="tab-pane fade show active mt-4" id="stats" role="tabpanel" aria-labelledby="stats-tab">
+            <div class="row row-cols-2 row-cols-md-4 row-cols-sm-2 g-4 text-center fw-bold">
+                <div class="col">
+                    <div class="card">
+                        <div class="card-header">🏀Picks</div>
+                        <div class="card-body">
+                            <h5 class="card-text">@Model.Result.PickCount</h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card">
+                        <div class="card-header">🎖Best picks</div>
+                        <div class="card-body">
+                            <h5 class="card-text">@Model.Result.CountBestPick</h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card">
+                        <div class="card-header">🥕Hell picks</div>
+                        <div class="card-body">
+                            <h5 class="card-text">@Model.Result.CountHellPick</h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card">
+                        <div class="card-header">💀No picks</div>
+                        <div class="card-body">
+                            <h5 class="card-text">@Model.Result.CountNoPick</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row row-cols-1 row-cols-md-3 row-cols-sm-1 g-4 text-center fw-bold mt-2">
+                <div class="col">
+                    <div class="card">
+                        <div class="card-header">Best Pick</div>
+                        <div class="card-body">
+                            <h5>
+                                <img src="@Model.Result.BestPickPlayer.Url" class="img-fluid homeStatsPic" />
+                                @Model.Result.BestPickPlayer.Player
+                            </h5>
+                            <h5>@Model.Result.BestPickPlayer.Date</h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card">
+                        <div class="card-header">Most Picked</div>
+                        <div class="card-body">
+                            <h5>
+                                <img src="@Model.Result.MostPickedPlayer.Url" class="img-fluid homeStatsPic" />
+                                @Model.Result.MostPickedPlayer.Player
+                            </h5>
+                            <h5>(@Model.Result.MostPickedPlayer.Points)</h5>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="card">
+                        <div class="card-header">Most Best Pick</div>
+                        <div class="card-body">
+                            @if (@Model.Result.MostBestPickedPlayer.Player != null)
+                            {
+                                <h5>
+                                    <img src="@Model.Result.MostBestPickedPlayer.Url" class="img-fluid homeStatsPic" />
+                                    @Model.Result.MostBestPickedPlayer.Player
+                                </h5>
+                                <h5>(@Model.Result.MostBestPickedPlayer.Points)</h5>
+                            }
+                            else
+                            {
+                                <h5>No Data</h5>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row row-cols-1 row-cols-md-2 row-cols-sm-1 g-4 text-center fw-bold mt-2">
+
+                <div class="col">
+                    <div class="card">
+                        <div class="card-header">Most Hell Pick</div>
+                        <div class="card-body">
+                            @if (@Model.Result.MostHellPickedPlayer != null)
+                            {
+                                <h5>
+                                    <img src="@Model.Result.MostHellPickedPlayer.Url" class="img-fluid homeStatsPic" />
+                                    @Model.Result.MostHellPickedPlayer.Player
+                                </h5>
+                                <h5>(@Model.Result.MostHellPickedPlayer.Points)</h5>
+
+                            }
+                            else
+                            {
+                                <h5>No data</h5>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card">
+                        <div class="card-header">Most picked team</div>
+                        <div class="card-body">
+                            <h5>
+                                <img src="@Model.Result.MostPickedteam.Url" class="img-fluid homeStatsPic" />
+                                @Model.Result.MostPickedteam.Player
+                            </h5>
+                            <h5>(@Model.Result.MostPickedteam.Points)</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    <div class="tab-pane fade mt-4" id="ttflImpact" role="tabpanel" aria-labelledby="ttflImpact-tab">
+        <!-- Place <div> tag where you want the feed to appear -->
+        <div id="curator-feed-default-feed-layout">
+            <a href="https://curator.io" target="_blank" class="crt-logo crt-tag">Powered by Curator.io</a>
+        </div>
+        <!-- The Javascript can be moved to the end of the html page before the </body> tag -->
+        <script type="text/javascript">
+            /* curator-feed-default-feed-layout */
+            (function () {
+                var i, e, d = document, s = "script"; i = d.createElement("script"); i.async = 1; i.charset = "UTF-8";
+                i.src = "https://cdn.curator.io/published/2693170a-60fc-4af6-9e0b-a14581377e22.js";
+                e = d.getElementsByTagName(s)[0]; e.parentNode.insertBefore(i, e);
+            })();
+        </script>
+    </div>
+    <div class="tab-pane fade mt-4" id="ttflFeed" role="tabpanel" aria-labelledby="ttflFeed-tab">
+        <!-- Place <div> tag where you want the feed to appear -->
+        <div id="curator-feed-ttfl-layout">
+            <a href="https://curator.io" target="_blank" class="crt-logo crt-tag">Powered by Curator.io</a>
+        </div>
+        <!-- The Javascript can be moved to the end of the html page before the </body> tag -->
+        <script type="text/javascript">
+            /* curator-feed-ttfl-layout */
+            (function () {
+                var i, e, d = document, s = "script"; i = d.createElement("script"); i.async = 1; i.charset = "UTF-8";
+                i.src = "https://cdn.curator.io/published/f94de7dd-af7f-4ca3-affe-4104414b7d00.js";
+                e = d.getElementsByTagName(s)[0]; e.parentNode.insertBefore(i, e);
+            })();
+        </script>
+    </div>
+    <div class="tab-pane fade mt-4" id="trashtalk" role="tabpanel" aria-labelledby="trashtalk-tab">
+        <!-- Place <div> tag where you want the feed to appear -->
+        <div id="curator-feed-trashtalk-layout">
+            <a href="https://curator.io" target="_blank" class="crt-logo crt-tag">Powered by Curator.io</a>
+        </div>
+        <!-- The Javascript can be moved to the end of the html page before the </body> tag -->
+        <script type="text/javascript">
+            /* curator-feed-trashtalk-layout */
+            (function () {
+                var i, e, d = document, s = "script"; i = d.createElement("script"); i.async = 1; i.charset = "UTF-8";
+                i.src = "https://cdn.curator.io/published/52090952-7d60-451b-9819-8875e18fea74.js";
+                e = d.getElementsByTagName(s)[0]; e.parentNode.insertBefore(i, e);
+            })();
+        </script>
+    </div>
+</div>
+

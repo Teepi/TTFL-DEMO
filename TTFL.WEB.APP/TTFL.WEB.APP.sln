@@ -1,0 +1,60 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32210.308
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TTFL.WEB.APP", "TTFL.WEB.APP\TTFL.WEB.APP.csproj", "{AC6E7018-DDD4-49AE-9DB8-07B1E8016404}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TTFL.COMMON", "TTFL.COMMON\TTFL.COMMON.csproj", "{76C93E24-0FC6-4871-A77A-C236631ADC89}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TTFL.ENTITIES", "TTFL.ENTITIES\TTFL.ENTITIES.csproj", "{513270BB-5DB0-4F35-BF34-BB9DD05AFFA5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TTFL.SERVICES", "TTFL.SERVICES\TTFL.SERVICES.csproj", "{C9F600E8-C5FE-4427-ACF5-233B3955B0C3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TTFL.SERVICES.CONTRACT", "TTFL.SERVICES.CONTRACT\TTFL.SERVICES.CONTRACT.csproj", "{AEF6CE03-624F-4856-BDFD-06112855E2F6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TTFL.CONSOLE", "TTFL.CONSOLE\TTFL.CONSOLE.csproj", "{290CBEBC-E1EB-48BF-9A13-9CF1D66D99B7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DevExtreme NuGet.config", "DevExtreme NuGet.config", "{E6A3C2CA-F628-4B6A-931D-69629BFC69BA}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet.config = NuGet.config
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AC6E7018-DDD4-49AE-9DB8-07B1E8016404}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC6E7018-DDD4-49AE-9DB8-07B1E8016404}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC6E7018-DDD4-49AE-9DB8-07B1E8016404}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC6E7018-DDD4-49AE-9DB8-07B1E8016404}.Release|Any CPU.Build.0 = Release|Any CPU
+		{76C93E24-0FC6-4871-A77A-C236631ADC89}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76C93E24-0FC6-4871-A77A-C236631ADC89}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76C93E24-0FC6-4871-A77A-C236631ADC89}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76C93E24-0FC6-4871-A77A-C236631ADC89}.Release|Any CPU.Build.0 = Release|Any CPU
+		{513270BB-5DB0-4F35-BF34-BB9DD05AFFA5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{513270BB-5DB0-4F35-BF34-BB9DD05AFFA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{513270BB-5DB0-4F35-BF34-BB9DD05AFFA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{513270BB-5DB0-4F35-BF34-BB9DD05AFFA5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C9F600E8-C5FE-4427-ACF5-233B3955B0C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C9F600E8-C5FE-4427-ACF5-233B3955B0C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C9F600E8-C5FE-4427-ACF5-233B3955B0C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C9F600E8-C5FE-4427-ACF5-233B3955B0C3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AEF6CE03-624F-4856-BDFD-06112855E2F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AEF6CE03-624F-4856-BDFD-06112855E2F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AEF6CE03-624F-4856-BDFD-06112855E2F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AEF6CE03-624F-4856-BDFD-06112855E2F6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{290CBEBC-E1EB-48BF-9A13-9CF1D66D99B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{290CBEBC-E1EB-48BF-9A13-9CF1D66D99B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{290CBEBC-E1EB-48BF-9A13-9CF1D66D99B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{290CBEBC-E1EB-48BF-9A13-9CF1D66D99B7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {84F1F4A2-9283-455D-A8CC-04EB9EE85E5A}
+	EndGlobalSection
+EndGlobal

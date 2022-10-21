@@ -1,0 +1,69 @@
+﻿@page
+@using TTFL.COMMON.Const
+@model TTFL.WEB.APP.Pages.Standing.HellPickModel
+@{
+    ViewData["Title"] = "Hell Pick";
+}
+
+<div class="container-fluid">
+    @if (Model.Result == null || Model.Result.Count == 0)
+    {
+        @await Html.PartialAsync("_BananaError", AppConsts.NoDataMessage)
+    }
+    else
+    {
+        <!--Hell pick standing table-->
+        <div class="row">
+            <div class="col-12">
+                <div class="card text-center mb-3">
+                    <div class="card-body">
+                        🥕🥕🥕 <b>Hell pick standing</b> 🥕🥕🥕
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <table class="table table-striped table-hover table-bordered">
+                <thead class="banana-background-color text-dark">
+                    <tr>
+                        <th class="text-center" scope="col">Rank</th>
+                        <th class="text-center" scope="col">Banana</th>
+                        <th class="text-center" scope="col">Team</th>
+                        <th class="text-center" scope="col">Count</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int i = 0;
+                        foreach (var banana in @Model.Result)
+                        {
+                            int rank = i + 1;
+                            <tr>
+                                @if (@rank == 1)
+                                {
+                                    <th class="text-center goldRank text-dark" scope="row">🥇</th>
+                                }
+                                else if (@rank == 2)
+                                {
+                                    <th class="text-center silverRank text-dark" scope="row">🥈</th>
+                                }
+                                else if (@rank == 3)
+                                {
+                                    <th class="text-center bronzeRank text-dark" scope="row">🥉</th>
+                                }
+                                else
+                                {
+                                    <th class="text-center" scope="row">@rank</th>
+                                }
+                                <td class="text-left">@banana.Banana</td>
+                                <td class="text-center">@banana.Team</td>
+                                <td class="text-center">@banana.Count</td>
+                            </tr>
+                            i++;
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

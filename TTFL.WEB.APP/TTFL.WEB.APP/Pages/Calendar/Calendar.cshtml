@@ -1,0 +1,219 @@
+﻿@page
+@model TTFL.WEB.APP.Pages.Calendar.CalendarModel
+@{
+    ViewData["Title"] = "Calendar";
+}
+
+<div class="col-lg-2 col-md-6 col-xs-12">
+    <div class="dropdown">
+        <button class="btn btn-primary dropdown-toggle col-12" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+            Select a date
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <li>
+                @foreach (var item in Model.Result)
+                {
+                    <a class="dropdown-item" href="#@item.AnchorDate">@item.Date</a>
+                }
+            </li>
+        </ul>
+    </div>
+    <br />
+</div>
+
+<div class="accordion" id="accordion">
+    @foreach (var res in Model.Result)
+    {
+        <div class="accordion-item" id="@res.AnchorDate">
+            <h2 class="accordion-header" id="heading-@res.AnchorDate">
+                <button class="accordion-button collasped collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#collapse-@res.AnchorDate" aria-expanded="false" aria-controls="collapse-@res.AnchorDate">
+                    <b>@res.Date</b>
+                </button>
+            </h2>
+            <div id="collapse-@res.AnchorDate" class="accordion-collapse collapse" aria-labelledby="heading-@res.AnchorDate" data-bs-parent="#accordion">
+                <div class="accordion-body">
+                    @foreach (var game in res?.ScheduleGamesOutputMatches)
+                    {
+                        <div date-game-id="@game.Id">
+                            <div class="row">
+
+                                <div class="col col-5 text-end">
+                                    @if (!string.IsNullOrEmpty(game.AwayTeamLogo))
+                                    {
+                                        <img src="@game.AwayTeamLogo" class="img-fluid" style="height:50px" alt="@game.AwayTeam" title="@game.AwayTeam">
+                                    }
+                                    else
+                                    {
+                                        <span>@game.AwayTeam</span>
+                                    }
+                                </div>
+                                <div class="col col-2 text-center vertical-align-center">
+                                    @if (string.IsNullOrEmpty(@game.GameUrl))
+                                    {
+                                        @if (game.AwayTeamPoints != 0 && game.HomeTeamPoints != 0)
+                                        {
+                                            <span>
+                                                @if (@game.AwayTeamGameWin)
+                                                {
+                                                    <b>@game.AwayTeamPoints </b>
+                                                }
+                                                else
+                                                {
+                                                    @game.AwayTeamPoints
+                                                }
+                                                -
+                                                @if (@game.HomeTeamGameWin)
+                                                {
+                                                    <b>@game.HomeTeamPoints </b>
+                                                }
+                                                else
+                                                {
+                                                    @game.HomeTeamPoints
+                                                }
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="matchLink">
+                                                <em>@game.Date</em>
+                                                @if (!string.IsNullOrEmpty(game.BroadCasters))
+                                                {
+                                                    <span class="broadcaster-name">@game.BroadCasters</span>
+                                                }
+                                            </span>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <a class="nbaLink" href="@game.GameUrl" target="_blank">
+                                            @if (game.AwayTeamPoints != 0 && game.HomeTeamPoints != 0)
+                                            {
+                                                <span class="scoreSpan">
+                                                    @if (@game.AwayTeamGameWin)
+                                                    {
+                                                        <b>@game.AwayTeamPoints </b>
+                                                    }
+                                                    else
+                                                    {
+                                                        @game.AwayTeamPoints
+                                                    }
+                                                    -
+                                                    @if (@game.HomeTeamGameWin)
+                                                    {
+                                                        <b>@game.HomeTeamPoints </b>
+                                                    }
+                                                    else
+                                                    {
+                                                        @game.HomeTeamPoints
+                                                    }
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <em>@game.Date</em>
+                                                @if (!string.IsNullOrEmpty(game.BroadCasters))
+                                                {
+                                                    <span class="broadcaster-name">@game.BroadCasters</span>
+                                                }
+                                            }
+                                        </a>
+                                    }
+
+                                </div>
+                                <div class="col col-5 text-start">
+                                    @if (!string.IsNullOrEmpty(game.HomeTeamLogo))
+                                    {
+                                        <img src="@game.HomeTeamLogo" class="img-fluid" style="height:50px" alt="@game.HomeTeam" title="@game.HomeTeam" />
+                                    }
+                                    else
+                                    {
+                                        <span>@game.HomeTeam</span>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<a id="back-to-top" href="#" class="btn btn-primary btn-lg back_to_top" role="button">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up" viewBox="0 0 16 16">
+        <path fill-rule="evenodd" d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5z" />
+    </svg>
+</a>
+
+<script>
+    $(document).ready(function () {
+        $(window).scroll(function () {
+            if ($(this).scrollTop() > 200) {
+                $('#back-to-top').fadeIn();
+            } else {
+                $('#back-to-top').fadeOut();
+            }
+        });
+        // scroll body to 0px on click
+        $('#back-to-top').click(function () {
+            $('body,html').animate({
+                scrollTop: 0
+            }, 400);
+            return false;
+        });
+    });
+</script>
+
+<style>
+    .back_to_top {
+        position: fixed;
+        bottom: 25px;
+        right: 25px;
+        display: none;
+    }
+
+    .dropdown-menu {
+        overflow: hidden;
+        overflow-y: auto;
+        max-height: 300px;
+    }
+
+    .vertical-align-center {
+        display: flex;
+        align-items: center; /* Vertical center alignment */
+        justify-content: center; /* Horizontal center alignment */
+    }
+
+    .accordion-body {
+        background-color: #383838;
+    }
+
+    .accordion-button:not(.collapsed) {
+        color: white !important;
+        background-color: #484848 !important;
+    }
+
+    .nbaLink {
+        color: white !important;
+        display: inline-grid;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .matchLink {
+        color: white !important;
+        display: inline-grid;
+        text-decoration: none;
+    }
+
+    .broadcaster-name {
+        text-decoration: none !important;
+        font-size: xx-small !important;
+    }
+
+    .scoreSpan {
+        display: inline-block;
+        font-size: 10px;
+    }
+</style>

@@ -1,0 +1,275 @@
+﻿@page
+@using Newtonsoft.Json
+@model TTFL.WEB.APP.Pages.Pick.HistoryModel
+@{
+    ViewData["Title"] = "Pick History";
+}
+
+@section scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.10.1/polyfill.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/3.8.0/exceljs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+}
+
+    <div class="container-fluid">
+        <div class="row row-cols-1 row-cols-md-1 row-cols-sm-1">
+            <div class="text-center fw-bold mb-4">
+                <div class="card h-100">
+                    <div class="card-header">Select a player</div>
+                    <div class="card-body">
+                        <form method="get">
+                            <div class="row">
+                                <div class="input-group">
+                                    <div class="col-6 offset-2">
+                                        <select class="form-select" aria-label="Select a date" name="playerId">
+                                            @{
+                                            foreach (var player in @Model.Players)
+                                            {
+                                                if (Model.SelectedPlayer != 0 && Model.SelectedPlayer == player.Key)
+                                                {
+                                                    <option value="@player.Key" selected>@player.Value</option>
+                                                }
+                                                else if (Model.SelectedPlayer == null && Model.Players.IndexOf(player) == 0)
+                                                {
+                                                    <option value="@player.Key" selected>@player.Value</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="@player.Key">@player.Value</option>
+                                                }
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                                <div class="input-group-append">
+                                    <button asp-page-handler="Submit" type="submit" class="btn btn-primary fw-bold">Go</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row row-cols-2 row-cols-md-5 row-cols-sm-2">
+        @if (@Model.SelectedPlayer != null)
+        {
+            <div class="text-center fw-bold mb-4">
+                <div class="card h-100">
+                    <div class="card-header">Player</div>
+                    <div class="card-body">
+                        <h5 class="card-text">@Model.Result.Player.Name / @Model.Result.Player.TeamName</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center fw-bold mb-4">
+                <div class="card h-100">
+                    <div class="card-header">🎖️Best picks</div>
+                    <div class="card-body">
+                        <h5 class="card-text">@Model.BestPickCount</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center fw-bold mb-4">
+                <div class="card h-100">
+                    <div class="card-header">🥕Hell picks</div>
+                    <div class="card-body">
+                        <h5 class="card-text">@Model.HellPickCount</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center fw-bold mb-4">
+                <div class="card h-100">
+                    <div class="card-header">💀 No picks</div>
+                    <div class="card-body">
+                        <h5 class="card-text">@Model.NoPickCount</h5>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center fw-bold mb-4">
+                <div class="card h-100">
+                    <div class="card-header">Avg pick</div>
+                    <div class="card-body">
+                        <h5 class="card-text">@Model.AvgPick</h5>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+    <div class="row">
+        @if (@Model.SelectedPlayer == null || Model.Result == null)
+        {
+            <div class="alert alert-danger text-center" role="alert">
+                Select a player to show history
+            </div>
+        }
+        else
+        {
+            <div class="row mt-4 mb-4" id="chart-demo">
+                @(Html.DevExtreme().Chart()
+            .ID("line-chart")
+            .Palette(VizPalette.Material)
+            .CommonSeriesSettings(s => s
+            .ArgumentField("PickDate")
+            .Type(SeriesType.Line)
+            )
+            .Title(t => t
+            .Text("Pick history")
+            )
+            .Margin(m => m.Bottom(20))
+            .ArgumentAxis(a => a
+            .ValueMarginsEnabled(false)
+            .Inverted(false)
+            .DiscreteAxisDivisionMode(DiscreteAxisDivisionMode.CrossLabels)
+            .Grid(g => g.Visible(true))
+            )
+            .Series(s => {
+            s.Add().ValueField("Rank").Name("Rank");
+            })
+            .Legend(l => l
+            .VerticalAlignment(VerticalEdge.Bottom)
+            .HorizontalAlignment(HorizontalAlignment.Center)
+            .ItemTextPosition(Position.Bottom)
+            )
+            .Export(e => e.Enabled(true))
+            .Tooltip(t => t.Enabled(true))
+            .DataSource(@Model.Result.Picks)
+            .AdjustOnZoom(true)
+            .CommonAxisSettings(s => s.Inverted(true))
+            .Legend(s => s.Visible(false))
+            .LoadingIndicator(s => s.Enabled(true))
+            .Tooltip(t => t.Enabled(true)
+            .ContentTemplate(@<text>
+                    <div class='state-tooltip'>
+                        <img src="<%- point.data.PickPlayerTeamLogo %>" /><h4 class='state'><%- argument %></h4>
+                        <div>
+                            <b class='caption'>Pick : </b><%- point.data.PickNumber %>
+                        </div>
+                        <div>
+                            <b class='caption'>Rank : </b><%- point.data.Rank %>
+                        </div>
+                        <div>
+                            <b class='caption'>Evolution : </b><%- point.data.Evolution %>
+                        </div>
+                        <div>
+                            <b class='caption'>Pick : </b><%- point.data.PickedPlayerName %> (<%- point.data.PickerPlayerPoints %>)
+                        </div>
+                    </div>
+                </text>)
+            ))
+
+            </div>
+            <div class="row">
+                @(Html.DevExtreme().DataGrid()
+            .ID("gridContainer")
+            .DataSource(@Model.Result.Picks)
+            .RemoteOperations(false)
+            .ShowBorders(true)
+            .Paging(p => p.PageSize(20))
+            .Pager(p => p
+            .ShowPageSizeSelector(true)
+            .AllowedPageSizes(new[] {20, 50, 0})
+            )
+            .SearchPanel(s => s
+            .Visible(true)
+            .HighlightCaseSensitive(true)
+            )
+            .HeaderFilter(headerFilter => headerFilter.Visible(true))
+            .Export(e => e.Enabled(true).AllowExportSelectedData(true))
+            .OnExporting("exporting")
+            .Columns(columns => {
+
+            columns.Add()
+            .DataField("PickNumber")
+            .AllowFiltering(false)
+            .Caption("Pick")
+            .Alignment(HorizontalAlignment.Center);
+
+            columns.Add()
+            .DataField("Rank")
+            .Caption("Rank/Evolution")
+            .AllowExporting(false)
+            .HidingPriority(5)
+            .CellTemplate(@<text>
+                    <% if (data.IsPositiveEvolution) { %>
+                    <div><i class="dx-icon-arrowup color-green"></i> <%- data.Rank %>/<%- data.Evolution %></div>
+                    <% } else { %>
+                    <div><i class="dx-icon-arrowdown color-red"></i> <%- data.Rank %>/<%- data.Evolution %></div>
+                    <% } %>
+                </text>
+            )
+            .Alignment(HorizontalAlignment.Left);
+
+            columns.Add()
+            .DataField("PickedPlayerName")
+            .Caption("Pick")
+            .MinWidth(250)
+            .Width(250)
+            .CellTemplate(@<text>
+                    <div>
+                        <img src="<%- data.PickPlayerTeamLogo %>" class="img-fluid lastPickTeamLogo" />
+                        <% if(data.BestPick) { %>
+                        <span><b><%- data.PickedPlayerName %></b>🎖️</span>
+                        <% } else if(data.HellPick) { %>
+                        <span><%- data.PickedPlayerName %>🥕</span>
+                        <% } else { %>
+                        <span><%- data.PickedPlayerName %></span>
+                        <% } %>
+                    </div>
+                </text>
+            )
+            .Alignment(HorizontalAlignment.Left);
+
+            columns.Add()
+            .DataField("PickerPlayerPoints")
+            .Caption("Pick points")
+            .DataType(GridColumnDataType.Number)
+            .Alignment(HorizontalAlignment.Center)
+            .HidingPriority(4);
+
+            columns.Add()
+            .DataField("TotalPoints")
+            .Caption("Total points")
+            .DataType(GridColumnDataType.Number)
+            .Alignment(HorizontalAlignment.Center)
+            .HidingPriority(3);
+
+            columns.Add()
+            .DataField("AvgPoints")
+            .Caption("Avg pick")
+            .DataType(GridColumnDataType.Object)
+            .Alignment(HorizontalAlignment.Center)
+            .HidingPriority(2);
+
+            columns.Add()
+            .DataField("TeamPosition")
+            .Caption("TeamRank")
+            .DataType(GridColumnDataType.Number)
+            .Alignment(HorizontalAlignment.Center)
+            .HidingPriority(1);
+            })
+            )
+            </div>
+        }
+
+        <script>
+            function exporting(e) {
+                var playerName = '@Html.Raw(@Model.SelectedPlayerName)';
+                var workbook = new ExcelJS.Workbook();
+                var worksheet = workbook.addWorksheet('Picks ' + playerName);
+
+                DevExpress.excelExporter.exportDataGrid({
+                    component: e.component,
+                    worksheet: worksheet,
+                    autoFilterEnabled: true
+                }).then(function() {
+                    workbook.xlsx.writeBuffer().then(function(buffer) {
+                        saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'Picks ' + playerName + '.xlsx');
+                    });
+                });
+                e.cancel = true;
+            }
+        </script>
+    </div>
+</div>

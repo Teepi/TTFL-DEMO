@@ -1,0 +1,147 @@
+html {
+    font-size: 14px;
+}
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+
+.banana-background-color {
+    background-color: dimgrey !important;
+    color: white !important;
+}
+
+.nav-item > a {
+    color: white !important
+}
+
+.goldRank {
+    color: #FFD700 !important;
+}
+
+.silverRank {
+    color: #C0C0C0 !important;
+}
+
+.bronzeRank {
+    color: #CD7F32 !important;
+}
+
+.table-header-card {
+    margin-bottom: 1rem !important;
+}
+
+.lastPickTeamLogo {
+    height: 30px !important;
+}
+
+.homeStatsPic {
+    height: 50px !important
+}
+
+.pickUl {
+    margin-bottom: 0 !important;
+    margin-top: 0 !important;
+    padding-left: 25% !important;
+}
+
+.bg-green {
+    background-color: #8DB255 !important;
+}
+
+.bg-red {
+    background-color: #D24D57 !important;
+}
+
+.bg-orange {
+    background-color: #FFB94E !important;
+}
+
+.color-orange {
+    color: #FFB94E !important;
+}
+
+.color-red {
+    color: #D24D57 !important;
+}
+
+.color-green {
+    color: #8DB255 !important;
+}
+
+.btn-primary {
+    background-color: #FFC000 !important;
+    border-color: dimgrey !important;
+    color: black !important
+}
+
+/*Buy me a coffee button*/
+#bmc-wbtn {
+    background: #FFC000 !important;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+.homeNavLink {
+    color: white !important;
+}
+
+    .homeNavLink.active {
+        color: black !important;
+        background-color: #FFC000 !important;
+        font-weight: bold !important;
+    }
+
+@media (max-width: 768px) {
+    .lpTable {
+        font-size: 5px !important;
+    }
+
+    .lpHeader {
+        font-size: 8px !important;
+    }
+
+    .table-header-card {
+        font-size: x-small !important;
+    }
+
+    .lastPickTeamLogo {
+        height: 15px !important;
+    }
+
+    .homeStatsPic {
+        height: 30px !important
+    }
+
+    .pickUl {
+        margin-bottom: 0 !important;
+        margin-top: 0 !important;
+        padding-left: 5% !important;
+    }
+
+    .homeNavLink {
+        font-size: smaller !important;
+    }
+
+    #myChart {
+        height: 200px !important;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 1200px) {
+    html {
+        font-size: 10px;
+    }
+
+    .pickUl {
+        margin-bottom: 0 !important;
+        margin-top: 0 !important;
+        padding-left: 13.5% !important;
+    }
+}

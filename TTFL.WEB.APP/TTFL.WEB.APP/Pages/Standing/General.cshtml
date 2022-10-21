@@ -1,0 +1,133 @@
+﻿@page
+@using TTFL.COMMON.Const
+@using TTFL.COMMON.Models.Response.Standing
+@model TTFL.WEB.APP.Pages.Standing.GeneralModel
+@{
+    ViewData["Title"] = "General Standing";
+}
+
+<div class="container-fluid">
+    @if (Model.Result == null)
+    {
+        @await Html.PartialAsync("_BananaError", AppConsts.NoDataMessage)
+    }
+    else
+    {
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card text-center table-header-car">
+                    <div class="card-body">
+                        <form method="get">
+                            <div class="row">
+                                <div class="input-group">
+                                    <div class="col-6 offset-2">
+                                        <select class="form-select" aria-label="Select a date" name="pickId">
+                                            @{
+                                                foreach (var item in @Model.Dates)
+                                                {
+                                                    if (Model.SelectedPick != 0 && Model.SelectedPick == item.Key)
+                                                    {
+                                                        <option value="@item.Key" selected>@item.Value</option>
+                                                    }
+                                                    else if (Model.SelectedPick == 0 && Model.Dates.IndexOf(@item) == 0)
+                                                    {
+                                                        <option value="@item.Key" selected>@item.Value</option>
+                                                    }
+                                                    else
+                                                    {
+                                                        <option value="@item.Key">@item.Value</option>
+                                                    }
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="input-group-append">
+                                        <button asp-page-handler="Submit" type="submit" class="btn btn-primary fw-bold">Go</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--General standing table-->
+        <div class="row row-cols-2 row-cols-md-2 row-cols-sm-2 text-center fw-bold mb-4">
+            <div class="col">
+                <div class="card">
+                    <div class="card-header">Pick @Model.PickId</div>
+                    <div class="card-body">
+                        <h5 class="card-text">@Model.PickDate</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card">
+                    <div class="card-header">Avg pick</div>
+                    <div class="card-body">
+                        <h5 class="card-text">@Model.AvgPick pts</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <table class="table table-responsive table-striped table-hover table-bordered">
+                <thead class="banana-background-color text-dark">
+                    <tr>
+                        <th class="text-center" scope="col">Rank</th>
+                        <th class="text-center" scope="col">Banana</th>
+                        <th class="text-center" scope="col">Standing</th>
+                        <th class="text-center" scope="col">Points / Avg</th>
+                        <th class="text-center" scope="col">Gap +1</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int i = 0;
+                        foreach (GeneralStandingResult banana in Model.Result)
+                        {
+                            int gap = i == 0 ? 0 : (Model.Result[i - 1].TotalPoints - @banana.TotalPoints);
+                            int rank = i + 1;
+                            <tr>
+                                @if (@rank == 1)
+                                {
+                                    <th class="text-center goldRank text-dark" scope="row">🥇</th>
+                                }
+                                else if (@rank == 2)
+                                {
+                                    <th class="text-center silverRank text-dark" scope="row">🥈</th>
+                                }
+                                else if (@rank == 3)
+                                {
+                                    <th class="text-center bronzeRank text-dark" scope="row">🥉</th>
+                                }
+                                else
+                                {
+                                    <th class="text-center" scope="row">@rank</th>
+                                }
+                                <td class="text-left">@banana.Username / @banana.Team</td>
+                                <td class="text-center">@banana.Rank</td>
+                                <td class="text-center">@banana.TotalPoints (@banana.AvgPoints)</td>
+                                @if (@gap >= 0 && @gap <= 20)
+                                {
+                                    <td class="text-center color-green fw-bold">@gap</td>
+                                }
+                                else if (@gap > 20 && @gap <= 40)
+                                {
+                                    <td class="text-center color-orange fw-bold">@gap</td>
+                                }
+                                else if (@gap > 40)
+                                {
+                                    <td class="text-center color-red fw-bold">@gap</td>
+                                }
+                            </tr>
+                            i++;
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

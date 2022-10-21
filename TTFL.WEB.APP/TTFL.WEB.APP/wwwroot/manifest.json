@@ -1,0 +1,22 @@
+{
+  "name": "Banana TTFL",
+  "short_name": "Banana TTFL",
+  "orientation": "portrait",
+  "display": "standalone",
+  "icons": [
+    {
+      "src": "https://banana-ttfl.com/Resources/Icons/BananaLogo-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://banana-ttfl.com/Resources/Icons/BananaLogo-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "start_url": "/",
+  "color": "#ffc000",
+  "background_color": "#ffc000",
+  "theme_color": "#ffc000"
+}
